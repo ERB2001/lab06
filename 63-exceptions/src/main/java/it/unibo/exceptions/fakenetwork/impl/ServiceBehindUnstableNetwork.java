@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.random.RandomGenerator;
 
+import it.unibo.exceptions.fakenetwork.api.NetworkException;
+
 import static it.unibo.exceptions.arithmetic.ArithmeticService.KEYWORDS;
 import static it.unibo.exceptions.arithmetic.ArithmeticUtil.nullIfNumberOrException;
 
@@ -30,6 +32,10 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
          * The probability should be in [0, 1[!
          */
         this.failProbability = failProbability;
+        if(this.failProbability < 0 || this.failProbability >= 1) {
+            final String errorMessage = "Comunication Failed!!!, the Probability is: ";
+            throw new java.lang.IllegalArgumentException(errorMessage + this.failProbability);
+        }
         randomGenerator = new Random(randomSeed);
     }
 
@@ -55,7 +61,6 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
             commandQueue.add(data);
         } else {
             final var message = data + " is not a valid keyword (allowed: " + KEYWORDS + "), nor is a number";
-            System.out.println(message);
             commandQueue.clear();
             /*
              * This method, in this point, should throw an IllegalStateException.
@@ -64,6 +69,7 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
              *
              * The previous exceptions must be set as the cause of the new exception
              */
+            throw new IllegalArgumentException(message, exceptionWhenParsedAsNumber);
         }
     }
 
@@ -79,7 +85,12 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
 
     private void accessTheNework(final String message) throws IOException {
         if (randomGenerator.nextDouble() < failProbability) {
-            throw new IOException("Generic I/O error");
+            if(message == null) {
+                throw new NetworkException();
+            } else {
+                throw new NetworkException(message);
+            }
+           
         }
     }
 
