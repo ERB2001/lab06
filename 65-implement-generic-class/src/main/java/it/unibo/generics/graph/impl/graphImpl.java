@@ -14,11 +14,9 @@ import java.util.Queue;
 
 public class GraphImpl<N> implements Graph<N> {
 
-    // List<N> graphList;
     Map<N, Set<N>> graphMap;
 
     public GraphImpl() {
-        // this.graphList = new LinkedList<N>();
         this.graphMap = new HashMap<N, Set<N>>();
     }
 
@@ -29,11 +27,6 @@ public class GraphImpl<N> implements Graph<N> {
      *             the node to add
      */
     public void addNode(N node) {
-        /*
-         * if (!this.graphList.contains(node)) {
-         * this.graphList.add(node);
-         * }
-         */
         Set<N> graph = new TreeSet<>();
         if (!this.graphMap.containsKey(node) && this.graphMap != null) {
             this.graphMap.put(node, graph);
@@ -54,7 +47,6 @@ public class GraphImpl<N> implements Graph<N> {
             graphMap.get(source).add(target);
 
         }
-        // System.out.println(graphMap);
         return;
     }
 
