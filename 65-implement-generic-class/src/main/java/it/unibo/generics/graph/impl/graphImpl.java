@@ -107,9 +107,6 @@ public class GraphImpl<N> implements Graph<N> {
                         queue.add(nodesN);
                     }
                 }
-
-                // System.out.println("1 " + queue);
-                // System.out.println("2 " + visitedNodeList);
             }
         }
         visitedNodeList.add(target);
